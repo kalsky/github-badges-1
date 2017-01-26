@@ -6,6 +6,7 @@ require 'cgi'
 
 user = nil
 repo = nil
+auth = nil
 
 get '/' do
   haml :index
@@ -28,16 +29,15 @@ end
         bg_color = params[:background] ? params[:background] : '4c1' # default bg color to green
         color    = params[:color] ? params[:color] : 'fff' # default text color to white
         issue    = params[:issue]
-        if (params[:auth])
+        if params[:auth]
           auth     = params[:auth]
-        else
-          auth     = ""
+        end
 
         case type
           when :state
             count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'state', {user: user, repo: repo})
-            count_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
-            button_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
+            count_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
+            button_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
           when :milestone
             count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'milestone.state', {user: user, repo: repo})
             count_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
@@ -90,10 +90,13 @@ def fetch(api_url, prop, args)
   end if response.is_a? Net::HTTPSuccess
 
   proplist = prop.split('.')
-  if (proplist.length==1)
+  if proplist.length==1
     JSON.parse(File.read(cached_response))[prop]
-  else if (proplist.length==2)
-    JSON.parse(File.read(cached_response))[proplist[0]][proplist[1]]
+  else 
+    if proplist.length==2
+      JSON.parse(File.read(cached_response))[proplist[0]][proplist[1]]
+    end
+  end
 end
 
 def create_button(opts)
