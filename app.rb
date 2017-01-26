@@ -24,9 +24,9 @@ end
       if params[:repo]
         user     = params[:user]
         repo     = params[:repo]
-        style    = params[:style] ? params[:style] : 'default'
+        style    = params[:style] ? params[:style] : 'flat'
         bg_color = params[:background] ? params[:background] : '4c1' # default bg color to green
-        color    = params[:color] ? params[:color] : 'fff' # default text color to white
+        color    = params[:color] ? params[:color] : 'ffffff' # default text color to white
         issue    = params[:issue]
         if params[:auth]
           auth     = params[:auth]
