@@ -18,7 +18,7 @@ get '/list' do
   list
 end
 
-[:star, :fork].each do |type|
+[:state, :milestone].each do |type|
   get "/#{type}.svg" do
     if params[:user]
       if params[:repo]
