@@ -117,7 +117,7 @@ def fetch(api_url, prop, args)
       if milestone
         milestone[proplist[1]]
       else
-        "No milestone"
+        "None"
       end
 
     end

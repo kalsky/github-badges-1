@@ -38,7 +38,7 @@ class MyTest < Test::Unit::TestCase
                   'milestone.title',
                   {user: 'qualisystems', repo: 'vcentershell', auth: 'aaa', issue: '2'})
 
-    assert_equal(myapp, 'No milestone')
+    assert_equal(myapp, 'None')
   end
 
 
