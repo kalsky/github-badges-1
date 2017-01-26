@@ -25,7 +25,7 @@ end
         user     = params[:user]
         repo     = params[:repo]
         style    = params[:style] ? params[:style] : 'flat'
-        bg_color = params[:background] ? params[:background] : '4c1' # default bg color to green
+        bg_color = params[:background] ? params[:background] : ''
         color    = params[:color] ? params[:color] : 'ffffff' # default text color to white
         issue    = params[:issue]
         if params[:auth]
@@ -36,13 +36,26 @@ end
 
         case type
           when :state
-            count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'state', {user: user, repo: repo, auth: auth, issue: issue})
+            status = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'state', {user: user, repo: repo, auth: auth, issue: issue})
             count_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
             button_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
+            if status=="open"
+              bg_color='FFAA00'
+            else
+              bg_color='4c1'
+            end
           when :milestone
-            count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'milestone.title', {user: user, repo: repo, auth: auth, issue: issue})
+            status = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'milestone.title', {user: user, repo: repo, auth: auth, issue: issue})
             count_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
             button_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
+            case status
+              when "Ready"
+                bg_color = 'FFAA00'
+              when "Backlog"
+                bg_color = 'bb0000'
+              when /^Sprint/
+                bg_color = '4c1'
+            end
         end
 
         # everything is ok.
@@ -57,7 +70,7 @@ end
         return create_button({
            :button_text => type,
            :count_url   => count_url,
-           :count       => count,
+           :count       => status,
            :button_url  => button_url,
            :bg_color    => bg_color,
            :color       => color,
