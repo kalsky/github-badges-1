@@ -28,7 +28,10 @@ end
         bg_color = params[:background] ? params[:background] : '4c1' # default bg color to green
         color    = params[:color] ? params[:color] : 'fff' # default text color to white
         issue    = params[:issue]
-        auth     = params[:auth]
+        if (params[:auth])
+          auth     = params[:auth]
+        else
+          auth     = ""
 
         case type
           when :state
