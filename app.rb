@@ -30,6 +30,8 @@ end
         issue    = params[:issue]
         if params[:auth]
           auth     = params[:auth]
+        else
+          auth     = ""
         end
 
         case type
@@ -60,7 +62,7 @@ end
            :bg_color    => bg_color,
            :color       => color,
            :style       => style
-         })
+         }, type)
       else
         content_type 'text/plain'
         return 'missing repo param'
@@ -81,6 +83,11 @@ def fetch(api_url, prop, args)
 
   request = Net::HTTP::Get.new(uri.request_uri)
   request.add_field 'If-Modified-Since', File.stat(cached_response).mtime.getgm.strftime('%a, %d %b %Y %H:%M:%S GMT') if File.exist?(cached_response)
+
+  auth = "#{args[:auth]}".split(":")
+  if auth.length==2
+    request.basic_auth auth[0], auth[1]
+  end
 
   response = http.request(request)
 
@@ -104,6 +111,13 @@ def fetch(api_url, prop, args)
   end
 end
 
-def create_button(opts)
-  Haml::Engine.new(File.read("./btn.haml")).render(Object.new, :opts => opts)
+def create_button(opts, type)
+  case type
+    when :state
+      Haml::Engine.new(File.read("./btn.haml")).render(Object.new, :opts => opts)
+    when :milestone
+      Haml::Engine.new(File.read("./btn_m.haml")).render(Object.new, :opts => opts)
+  end
+
+
 end

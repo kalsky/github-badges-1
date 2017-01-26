@@ -2,7 +2,7 @@
 
 %svg{'xmlns'    => 'http://www.w3.org/2000/svg',
   'xmlns:xlink' => 'http://www.w3.org/1999/xlink',
-  'width'       => '80',
+  'width'       => '200',
   'height'      => '20'}
   %linearGradient{'id' => 'a', 'x2' => 0, 'y2' => '100%'}
     - case opts[:style]
@@ -33,18 +33,18 @@
               'stop-opacity' => '.5'}
 
   %rect{'rx' => '3',
-        'width' => '80',
+        'width' => '120',
         'height' => '20',
         'fill' => '#555'}
 
   %rect{'rx' => '3',
-        'x' => '37',
-        'width' => '43',
+        'x' => '60',
+        'width' => '100',
         'height' => '20',
         'fill' => "##{opts[:bg_color]}"}
 
   %path{'fill' => "##{opts[:bg_color]}",
-        'd' => 'M37 0h1v20h-1z'}
+        'd' => 'M60 0h1v20h-1z'}
 
   %rect{'rx'     => '3',
         'width'  => '80',
@@ -58,22 +58,22 @@
     %a#link{'xlink:href' => "#{opts[:button_url]}",
             'target' => '_new'}
       -# Shadow
-      %text{'x' => '19.5',
+      %text{'x' => '30',
             'y' => '15',
             'fill-opacity' => '.3',
             'fill' => '#010101'}= opts[:button_text]
       -# Actual button text
-      %text{'x' => '19.5',
+      %text{'x' => '30',
             'y' => '14',
             'fill' => "##{opts[:color]}"}= opts[:button_text]
     %a#count-link{'xlink:href' => "#{opts[:count_url]}",
                   'target' => '_new'}
       -# Shadow
-      %text#count{'x' => '57.5',
+      %text#count{'x' => '90',
             'y' => '15',
             'fill-opacity' => '.3',
             'fill' => '#010101'}= opts[:count]
       -# Actual count text
-      %text#count{'x' => '57.5',
+      %text#count{'x' => '90',
             'y' => '14',
             'fill' => "##{opts[:color]}"}= opts[:count]

@@ -40,4 +40,6 @@ class MyTest < Test::Unit::TestCase
 
     assert_equal(myapp, 'No milestone')
   end
+
+
 end
