@@ -6,7 +6,6 @@ require 'cgi'
 
 user = nil
 repo = nil
-auth = nil
 
 get '/' do
   haml :index
@@ -35,11 +34,11 @@ end
 
         case type
           when :state
-            count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'state', {user: user, repo: repo})
+            count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'state', {user: user, repo: repo, auth: auth, issue: issue})
             count_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
             button_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
           when :milestone
-            count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'milestone.state', {user: user, repo: repo})
+            count = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'milestone.title', {user: user, repo: repo, auth: auth, issue: issue})
             count_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
             button_url = "https://github.com/#{user}/#{repo}/issues/#{issue}"
         end
@@ -74,7 +73,7 @@ end
 end
 
 def fetch(api_url, prop, args)
-  cached_response = "cache/#{args[:user]}:#{args[:repo]}"
+  cached_response = "cache/#{args[:user]}:#{args[:repo]}:#{args[:issue]}"
   uri = URI.parse api_url
   http = Net::HTTP.new(uri.host, uri.port)
   http.use_ssl = true
@@ -94,7 +93,13 @@ def fetch(api_url, prop, args)
     JSON.parse(File.read(cached_response))[prop]
   else 
     if proplist.length==2
-      JSON.parse(File.read(cached_response))[proplist[0]][proplist[1]]
+      milestone = JSON.parse(File.read(cached_response))[proplist[0]]
+      if milestone
+        milestone[proplist[1]]
+      else
+        "No milestone"
+      end
+
     end
   end
 end
