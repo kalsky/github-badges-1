@@ -18,14 +18,14 @@ get '/list' do
   list
 end
 
-[:state, :milestone].each do |type|
+[:state, :milestone, :assigned].each do |type|
   get "/#{type}.svg" do
     if params[:user]
       if params[:repo]
         user     = params[:user]
         repo     = params[:repo]
         style    = params[:style] ? params[:style] : 'flat'
-        bg_color = params[:background] ? params[:background] : ''
+        bg_color = params[:background] ? params[:background] : 'D3D3D3'
         color    = params[:color] ? params[:color] : 'ffffff' # default text color to white
         issue    = params[:issue]
         if params[:auth]
@@ -43,6 +43,15 @@ end
               bg_color='FFAA00'
             else
               bg_color='4c1'
+            end
+          when :assigned
+            status = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'assignee.login', {user: user, repo: repo, auth: auth, issue: issue})
+            count_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
+            button_url = "https://github.com/repos/#{user}/#{repo}/issues/#{issue}"
+            if status=="None"
+              bg_color='D3D3D3'
+            else
+              bg_color='0095d4'
             end
           when :milestone
             status = fetch("https://api.github.com/repos/#{user}/#{repo}/issues/#{issue}", 'milestone.title', {user: user, repo: repo, auth: auth, issue: issue})

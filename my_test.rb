@@ -16,11 +16,10 @@ class MyTest < Test::Unit::TestCase
     # Do nothing
   end
 
-  # Fake test
   def test_fetch_state
     myapp = fetch("https://api.github.com/repos/qualisystems/vcentershell/issues/2",
                   'state',
-                  {user: 'qualisystems', repo: 'vcentershell', auth: 'aaa', issue: '2'})
+                  {user: 'qualisystems', repo: 'vcentershell', auth: '', issue: '2'})
 
     assert_equal(myapp, "closed")
   end
@@ -28,7 +27,7 @@ class MyTest < Test::Unit::TestCase
   def test_fetch_milestone
     myapp = fetch("https://api.github.com/repos/qualisystems/vcentershell/issues/832",
                   'milestone.title',
-                  {user: 'qualisystems', repo: 'vcentershell', auth: 'aaa', issue: '832'})
+                  {user: 'qualisystems', repo: 'vcentershell', auth: '', issue: '832'})
 
     assert_equal(myapp, '7.2 Internal Release 5')
   end
@@ -36,9 +35,17 @@ class MyTest < Test::Unit::TestCase
   def test_fetch_no_milestone
     myapp = fetch("https://api.github.com/repos/qualisystems/vcentershell/issues/2",
                   'milestone.title',
-                  {user: 'qualisystems', repo: 'vcentershell', auth: 'aaa', issue: '2'})
+                  {user: 'qualisystems', repo: 'vcentershell', auth: '', issue: '2'})
 
     assert_equal(myapp, 'None')
+  end
+
+  def test_fetch_assigned_to
+    myapp = fetch("https://api.github.com/repos/qualisystems/vcentershell/issues/834",
+                  'assignee.login',
+                  {user: 'qualisystems', repo: 'vcentershell', auth: '', issue: '834'})
+
+    assert_equal(myapp, 'alexazarh')
   end
 
 
