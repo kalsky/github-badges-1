@@ -139,6 +139,8 @@ def create_button(opts, type)
       Haml::Engine.new(File.read("./btn.haml")).render(Object.new, :opts => opts)
     when :milestone
       Haml::Engine.new(File.read("./btn_m.haml")).render(Object.new, :opts => opts)
+    when :assigned
+      Haml::Engine.new(File.read("./btn_m.haml")).render(Object.new, :opts => opts)
   end
 
 
